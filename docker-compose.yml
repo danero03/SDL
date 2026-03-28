@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespass
+      POSTGRES_DB: shop_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d 
+
+  app:
+    build: .
+    container_name: shop_app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
